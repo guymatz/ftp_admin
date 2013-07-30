@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+    <ul>
+      {% for ftp_user in ftp_users %}
+      <div><p>{{ ftp_user }} has password {{ ftp_users[ftp_user]['password'] }}</p></div>
+      {% endfor %}
+    </ul>
+{% endblock %}

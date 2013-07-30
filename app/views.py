@@ -6,6 +6,9 @@ import json
 import string, os, random
 import tempfile
 
+DATA_BAG='music_upload'
+DATA_BAG_ITEM='upload_users-dev'
+
 @app.route('/')
 @app.route('/index')
 def index():
@@ -21,20 +24,20 @@ def new_ftp():
   form = NewFtpForm()
   # Check to see if we're getting a post
   if form.validate_on_submit():
-    # Load in users from chef and cehck to see if we're putting in a duplicate
+    # Load in users from chef and check to see if we're putting in a duplicate
     ftp_users = load_users()
-    ftp_username = form.ftp_username.data
-    app.logger.debug("ftp_username = " + ftp_username)
-    if ftp_username in ftp_users:
-      flash('FTP account for ' + ftp_username + ' already exists!')
-      return redirect('/index')
+    new_user = form.ftp_username.data
+    app.logger.debug("new_user = " + new_user)
+    if user_exists(new_user, ftp_users):
+      flash('FTP account for ' + new_user + ' already exists!')
+      return redirect('/new_ftp')
     # Generate password (see below) and return home, displaying new pwd
     pwd = new_random_password()
-    app.logger.debug(ftp_username + "=" + pwd)
+    app.logger.debug(new_user + "=" + pwd)
     app.logger.debug("ftp_users has this many entries:" + str(len(ftp_users)))
-    ftp_users[form.ftp_username.data] = pwd
+    ftp_users[new_user] = pwd
     save_users(ftp_users)
-    flash('FTP account for ' + form.ftp_username.data + ' created!  Password is ' + pwd)
+    flash('FTP account for ' + new_user + ' created!  Password is ' + pwd)
     return redirect('/new_ftp')
   # Must be a GET . . .  create form
   return render_template('new_ftp.html', title = 'Sign In', form = form)
@@ -46,10 +49,11 @@ def list_ftp():
 
 def load_users():
   try:
-    knife_args = ["knife", "data", "bag", "show", "music_upload", "-f",
-                  "json", "upload_users",
+    knife_args = ["knife", "data", "bag", "show", DATA_BAG, "-f",
+                  "json", DATA_BAG_ITEM,
                   "--secret-file=/etc/chef/encrypted_data_bag_secret"
                   ]
+    app.logger.debug("Knife_args: " + ' '.join(knife_args))
     ftp_users = subprocess.check_output(knife_args)
     ftp_users = json.loads(ftp_users)
   except:
@@ -74,9 +78,10 @@ def save_users_to_chef(ftp_users):
   return
   try:
     knife_args = ["knife", "data", "bag", "from", 
-                  "file", "music_upload", tmp_file,
+                  "file", DATA_BAG, tmp_file,
                   "--secret-file=/etc/chef/encrypted_data_bag_secret"
                   ]
+    app.logger.debug("Knife_args: " + ' '.join(knife_args))
     ftp_users = subprocess.check_output(knife_args)
     ftp_users = json.loads(ftp_users)
   except:
@@ -87,7 +92,7 @@ def save_users_to_chef(ftp_users):
 
 # Save users dict to temp file, then upload to chef server
 def save_users_to_git():
-  USERS_FILE="repo/data_bags/music_upload/upload_users.json"
+  USERS_FILE="repo/data_bags/" + DATA_BAG + "/" + DATA_BAG_ITEM + ".json"
   ftp_users = load_users()
   # TODO save file and git commit/push
   return
@@ -99,3 +104,12 @@ def new_random_password():
   random.seed = (os.urandom(1024))
   pwd = ''.join(random.choice(chars) for i in range(PWD_LENGTH))
   return pwd
+
+def user_exists(new_user, hash_of_users):
+  # lower-case everything and check for dupes
+  new_user = new_user.lower()
+  hash_of_users = {k.lower():v for k,v in hash_of_users.items()}
+  if new_user in hash_of_users:
+    return True
+  else:
+    return False

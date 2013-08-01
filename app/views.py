@@ -13,8 +13,7 @@ DATA_BAG_ITEM='upload_users-dev'
 @app.route('/index')
 def index():
   return render_template("index.html",
-                          title = 'Home',
-                          user = user
+                          title = 'Home'
 			)
 
 @app.route('/new_ftp', methods = ['GET', 'POST'])

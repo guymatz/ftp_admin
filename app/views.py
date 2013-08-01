@@ -64,17 +64,17 @@ def load_users(encryption_required = True):
 def persist_users(new_user, ftp_users):
   try:
     save_users_to_chef(ftp_users)
-    save_users_to_git(new_user)
+    #save_users_to_git(new_user)
   except Exception, e:
     raise e
 
 # Save users dict to temp file, then upload to chef server
 def save_users_to_chef(ftp_users):
   app.logger.debug("Saving users to chef server")
-  _, tmp_file = tempfile.mkstemp()
-  tmp_file = open(tmp_file, 'w')
-  tmp_file.write(json.dumps(ftp_users))
-  tmp_file.close()
+  tmp_file = '/tmp/tmp.FTP_ADMIN.json'
+  tf = open(tmp_file, 'w')
+  tf.write(json.dumps(ftp_users))
+  tf.close()
   try:
     knife_args = ["knife", "data", "bag", "from", 
                   "file", DATA_BAG, tmp_file,
@@ -82,11 +82,12 @@ def save_users_to_chef(ftp_users):
                   ]
     app.logger.debug("Knife_args in save_users_to_chef: " + ' '.join(knife_args))
     ftp_users = subprocess.check_output(knife_args)
-    ftp_users = json.loads(ftp_users)
+    #ftp_users = json.loads(ftp_users)
   except:
     flash('Unexpected knife error:')
+  finally:
+    os.unlink(tmp_file)
     return redirect('/index')
-  os.unlink(tmp_file.name)
   return 
 
 def save_users_to_git(new_user):
@@ -134,7 +135,8 @@ def save_users_to_git(new_user):
     repo.git.add(REPO_FILE)
     repo.git.commit(m='FTP account added by ' + 'username ' + ':'  + new_user)
   except Exception, e:
-    raise e
+    app.logger.debug("Tried git add/commit")
+    #raise e
   # TODO change username above to the currently logged in user
   return
 

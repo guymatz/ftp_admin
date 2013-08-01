@@ -33,7 +33,7 @@ def new_ftp():
     app.logger.debug(new_user + "=" + pwd)
     app.logger.debug("ftp_users has this many entries:" + str(len(ftp_users)))
     ftp_users[new_user] = pwd
-    persist_users(ftp_users)
+    persist_users(new_user, ftp_users)
     flash('FTP account for ' + new_user + ' created!  Password is ' + pwd)
     return redirect('/new_ftp')
   # Must be a GET . . .  create form
@@ -59,15 +59,15 @@ def load_users(encryption_required = True):
   return ftp_users
 
 # persist the user to databag, chef server, git, etc.
-def persist_users(ftp_users):
+def persist_users(new_user,ftp_users):
   try:
     save_users_to_chef(ftp_users)
-    save_users_to_git()
+    save_users_to_git(new_user)
   except Exception, e:
     raise e
 
 # Save users dict to temp file, then upload to chef server
-def save_users_to_chef(ftp_users, tmp_file):
+def save_users_to_chef(ftp_users):
   app.logger.debug("Saving users to chef server")
   _, tmp_file = tempfile.mkstemp()
   tmp_file = open(tmp_file, 'w')
@@ -88,7 +88,7 @@ def save_users_to_chef(ftp_users, tmp_file):
   return 
 
 # Save users dict to temp file, then upload to chef server
-def save_users_to_git():
+def save_users_to_git(new_user):
   USERS_FILE="repo/data_bags/" + DATA_BAG + "/" + DATA_BAG_ITEM + ".json"
   ftp_users = load_users(encryption_required = False)
   

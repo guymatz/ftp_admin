@@ -5,9 +5,11 @@ import subprocess
 import json
 import string, os, random
 import tempfile
+import git
 
 DATA_BAG='music_upload'
 DATA_BAG_ITEM='upload_users-dev'
+REPO_DIR='repo'
 
 @app.route('/')
 @app.route('/index')
@@ -33,7 +35,7 @@ def new_ftp():
     app.logger.debug(new_user + "=" + pwd)
     app.logger.debug("ftp_users has this many entries:" + str(len(ftp_users)))
     ftp_users[new_user] = pwd
-    persist_users(ftp_users)
+    persist_users(new_user, ftp_users)
     flash('FTP account for ' + new_user + ' created!  Password is ' + pwd)
     return redirect('/new_ftp')
   # Must be a GET . . .  create form
@@ -59,15 +61,15 @@ def load_users(encryption_required = True):
   return ftp_users
 
 # persist the user to databag, chef server, git, etc.
-def persist_users(ftp_users):
+def persist_users(new_user, ftp_users):
   try:
     save_users_to_chef(ftp_users)
-    save_users_to_git()
+    save_users_to_git(new_user)
   except Exception, e:
     raise e
 
 # Save users dict to temp file, then upload to chef server
-def save_users_to_chef(ftp_users, tmp_file):
+def save_users_to_chef(ftp_users):
   app.logger.debug("Saving users to chef server")
   _, tmp_file = tempfile.mkstemp()
   tmp_file = open(tmp_file, 'w')
@@ -87,13 +89,55 @@ def save_users_to_chef(ftp_users, tmp_file):
   os.unlink(tmp_file.name)
   return 
 
-# Save users dict to temp file, then upload to chef server
-def save_users_to_git():
-  USERS_FILE="repo/data_bags/" + DATA_BAG + "/" + DATA_BAG_ITEM + ".json"
+def save_users_to_git(new_user):
+  app.logger.debug("In git")
+  # location of the file in the git repo
+  REPO_FILE = "data_bags/" + DATA_BAG + "/" + DATA_BAG_ITEM + ".json"
+  # file on th FS
+  USERS_FILE= REPO_DIR + "/" + REPO_FILE
+  app.logger.debug("Users file: " + USERS_FILE)
   ftp_users = load_users(encryption_required = False)
-  
-  # TODO save file and git commit/push
+  app.logger.debug("Just got ftp_users")
+  # Update git
+  try:
+    app.logger.debug("REPO_DIR = " + REPO_DIR)
+    repo = git.Repo(REPO_DIR)
+  except Exception, e:
+    raise e
+  try:
+    app.logger.debug("Now a pull")
+    repo.git.pull()  
+  except Exception, e:
+    raise e
+
+  # get unexcrypted users
+  try:
+    knife_args = ["knife", "data", "bag", "show",
+                  DATA_BAG, DATA_BAG_ITEM, "-f", "json"
+                  ]
+    app.logger.debug("Knife_args in save_users_to_git: " + ' '.join(knife_args))
+    output = subprocess.check_output(knife_args)
+  except Exception, e:
+    raise e
+  try:
+    app.logger.debug("In git write")
+    f = open(USERS_FILE, 'w')
+  except:
+    raise Exception("Could not open file: " + USERS_FILE)
+  try:
+    f.write(output)
+    f.close()
+  except:
+    raise Exception("Could write to file")
+  app.logger.debug("Here in git?")
+  try:
+    repo.git.add(REPO_FILE)
+    repo.git.commit(m='FTP account added by ' + 'username ' + ':'  + new_user)
+  except Exception, e:
+    raise e
+  # TODO change username above to the currently logged in user
   return
+
 
 def new_random_password():
   app.logger.debug("Generating password . . .")

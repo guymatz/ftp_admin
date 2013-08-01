@@ -12,8 +12,6 @@ DATA_BAG_ITEM='upload_users-dev'
 @app.route('/')
 @app.route('/index')
 def index():
-  user = { 'nickname': 'Carlos Danger' }
-
   return render_template("index.html",
                           title = 'Home',
                           user = user
@@ -31,12 +29,12 @@ def new_ftp():
     if user_exists(new_user, ftp_users):
       flash('FTP account for ' + new_user + ' already exists!')
       return redirect('/new_ftp')
-    # Generate password (see below) and return home, displaying new pwd
+    # Generate password (see below) and return back to ftp, displaying new pwd
     pwd = new_random_password()
     app.logger.debug(new_user + "=" + pwd)
     app.logger.debug("ftp_users has this many entries:" + str(len(ftp_users)))
     ftp_users[new_user] = pwd
-    save_users(ftp_users)
+    persist_users(ftp_users)
     flash('FTP account for ' + new_user + ' created!  Password is ' + pwd)
     return redirect('/new_ftp')
   # Must be a GET . . .  create form
@@ -47,41 +45,41 @@ def list_ftp():
   ftp_users = load_users()
   return render_template('ftp_users.html', title = 'FTP Users', ftp_users = ftp_users)
 
-def load_users():
+def load_users(encryption_required = True):
   try:
     knife_args = ["knife", "data", "bag", "show", DATA_BAG, "-f",
-                  "json", DATA_BAG_ITEM,
-                  "--secret-file=/etc/chef/encrypted_data_bag_secret"
-                  ]
+                  "json", DATA_BAG_ITEM ]
+    if encryption_required:
+       knife_args.append("--secret-file=/etc/chef/encrypted_data_bag_secret")
     app.logger.debug("Knife_args: " + ' '.join(knife_args))
     ftp_users = subprocess.check_output(knife_args)
     ftp_users = json.loads(ftp_users)
   except:
-    flash('Unexpected error:')
-    return redirect('/index')
+    raise Exception("Error getting databag with knife using:" + 
+      ' '.join(knife_args))
   return ftp_users
 
-def save_users(ftp_users):
+# persist the user to databag, chef server, git, etc.
+def persist_users(ftp_users):
   try:
     save_users_to_chef(ftp_users)
     save_users_to_git()
   except Exception, e:
     raise e
-  
 
 # Save users dict to temp file, then upload to chef server
-def save_users_to_chef(ftp_users):
+def save_users_to_chef(ftp_users, tmp_file):
+  app.logger.debug("Saving users to chef server")
   _, tmp_file = tempfile.mkstemp()
   tmp_file = open(tmp_file, 'w')
   tmp_file.write(json.dumps(ftp_users))
   tmp_file.close()
-  return
   try:
     knife_args = ["knife", "data", "bag", "from", 
                   "file", DATA_BAG, tmp_file,
                   "--secret-file=/etc/chef/encrypted_data_bag_secret"
                   ]
-    app.logger.debug("Knife_args: " + ' '.join(knife_args))
+    app.logger.debug("Knife_args in save_users_to_chef: " + ' '.join(knife_args))
     ftp_users = subprocess.check_output(knife_args)
     ftp_users = json.loads(ftp_users)
   except:
@@ -93,7 +91,8 @@ def save_users_to_chef(ftp_users):
 # Save users dict to temp file, then upload to chef server
 def save_users_to_git():
   USERS_FILE="repo/data_bags/" + DATA_BAG + "/" + DATA_BAG_ITEM + ".json"
-  ftp_users = load_users()
+  ftp_users = load_users(encryption_required = False)
+  
   # TODO save file and git commit/push
   return
 

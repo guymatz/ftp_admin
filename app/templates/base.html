@@ -5,22 +5,33 @@
     {% else %}
       <title>FTP Administration</title>
     {% endif %}
+      <link rel=stylesheet type=text/css href="{{ url_for('static', filename='source/style.css') }}">
+      <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
   </head>
   <body>
-    <div>FTP Administration:
-      <a href="/index">Home</a>
-      <a href="/new_ftp">New FTP Account</a>
-      <a href="/list_ftp">List FTP Accounts</a>
+    <div id="wrapper">
+      <div id="header">FTP Administration:
+        <a href="/index">Home</a>
+        <a href="/new_ftp">New FTP Account</a>
+        <a href="/list_ftp">List FTP Accounts</a>
+      </div>
+      <div id="leftcolumn">
+        <!-- TODO Add links for Logout and Admin Controls if appropriate -->
+      </div>
+      <div id="rightcolumn">
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <ul>
+            {% for message in messages %}
+              <li>{{message }} </li>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+      </div>
+      <div id="footer">
+        <!-- TODO Add a link to Ops Home page -->
+      </div>
     </div>
-    <hr>
-      {% with messages = get_flashed_messages() %}
-        {% if messages %}
-          <ul>
-          {% for message in messages %}
-            <li>{{message }} </li>
-          {% endfor %}
-        {% endif %}
-      {% endwith %}
-      {% block content %}{% endblock %}
   </body>
 </html>

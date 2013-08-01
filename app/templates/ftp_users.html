@@ -1,8 +1,21 @@
 {% extends "base.html" %}
 {% block content %}
-    <ul>
-      {% for ftp_user in ftp_users %}
-      <div><p>{{ ftp_user }} has password {{ ftp_users[ftp_user]['password'] }}</p></div>
-      {% endfor %}
-    </ul>
+
+<table id="hor-minimalist-a" summary="FTP Accounts">
+  <thead>
+  	<tr>
+  	  <th scope="col">Username</th>
+	  <th scope="col">Password</th>
+	</tr>
+  </thead>
+  <tbody>
+  {% for ftp_user in ftp_users|sort %}
+	<tr>
+	  <th>{{ ftp_user }} </th>
+	  <th>{{ ftp_users[ftp_user]['password'] }} </th>
+	</tr>
+  {% endfor %}
+</tbody>
+</table>
+
 {% endblock %}

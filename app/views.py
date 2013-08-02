@@ -34,7 +34,7 @@ def new_ftp():
     pwd = new_random_password()
     app.logger.debug(new_user + "=" + pwd)
     app.logger.debug("ftp_users has this many entries:" + str(len(ftp_users)))
-    ftp_users[new_user] = pwd
+    ftp_users[new_user] = { "password": pwd }
     persist_users(new_user, ftp_users)
     flash('FTP account for ' + new_user + ' created!  Password is ' + pwd)
     return redirect('/new_ftp')

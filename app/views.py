@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect
 from app import app
-from forms import NewFtpForm
+from forms import NewFtpForm, LoginForm
 import subprocess
 import json
 import string, os, random
@@ -17,6 +17,30 @@ def index():
   return render_template("index.html",
                           title = 'Home'
 			)
+
+@app.route('/login', methods = ['GET', 'POST'])
+def login():
+  form = LoginForm()
+  # Check to see if we're getting a post
+  if form.validate_on_submit():
+    # Load in users from chef and check to see if we're putting in a duplicate
+    #app_users = load_app_users()
+    app_users = {'admin': 'admin'}
+    login_user = form.username.data
+    login_pwd = form.password.data
+    app.logger.debug("login_user = " + login_user)
+    if login_user not in app_users or login_pwd != app_users[login_user]:
+      flash('Sorry!!  Account does not exist or password is wrong . . .')
+      return redirect('/login')
+    #session[login_user]="Logged In"
+    return redirect('/new_ftp')
+  # Must be a GET . . .  create form
+  return render_template('login.html', title = 'Sign In', form = form)
+
+@app.route('/logout', methods = ['GET'])
+def logout():
+  session['login_user'] = False
+  return render_template('login.html', title = 'Sign In', form = form)
 
 @app.route('/new_ftp', methods = ['GET', 'POST'])
 def new_ftp():

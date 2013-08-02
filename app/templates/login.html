@@ -1,0 +1,18 @@
+<!-- extend from base layout -->
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Login:</h1>
+<form action="" method="post" name="login">
+    {{form.hidden_tag()}}
+    <dl>
+      <dt>Username:
+      <dd>{{form.username(size=20)}}
+
+      <dt>Password:
+      <dd>{{form.password(size=20)}}
+
+      <dd><input type="submit" value="Login">
+    </dl>
+</form>
+{% endblock %}

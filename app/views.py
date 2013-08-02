@@ -61,10 +61,10 @@ def load_users(encryption_required = True):
   return ftp_users
 
 # persist the user to databag, chef server, git, etc.
-def persist_users(new_user, ftp_users):
+def persist_users(new_user,ftp_users):
   try:
     save_users_to_chef(ftp_users)
-    #save_users_to_git(new_user)
+    save_users_to_git(new_user)
   except Exception, e:
     raise e
 

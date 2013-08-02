@@ -3,11 +3,10 @@
 
 {% block content %}
 <h1>New FTP Account</h1>
-<form action="" method="post" name="new_ftp">
-    {{form.hidden_tag()}}
+<form action="/ftp/new" method="post">
     <dl>
       <dt>Please enter the username of the FTP Account:
-      <dd>{{form.ftp_username(size=20)}}
+      <dd><input type="text" name="ftp_username">
       <dd><input type="submit" value="Create Account">
     </dl>
 </form>

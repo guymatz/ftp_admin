@@ -11,12 +11,17 @@
   <body>
     <div id="wrapper">
       <div id="header">FTP Administration:
-        <a href="/index">Home</a>
+      {% if 'username' in session %}
         <a href="/ftp/new">New FTP Account</a>
         <a href="/ftp/list">List FTP Accounts</a>
       </div>
+      {% endif %}
       <div id="leftcolumn">
-        <!-- TODO Add links for Logout and Admin Controls if appropriate -->
+        {% if 'username' in session and 'admin' in session %}
+        <a href="/admin/new">New Admin Account</a>
+        <a href="/admin/list">List Admin Accounts</a>
+      </div>
+      {% endif %}
       </div>
       <div id="rightcolumn">
         {% with messages = get_flashed_messages() %}
@@ -27,7 +32,27 @@
             {% endfor %}
           {% endif %}
         {% endwith %}
+        {% if 'username' in session %}
+        
+        {% else %}
+          <h1>Login:</h1>
+            <form action="/" method="post" name="login">
+            <dl>
+              <dt>Username:
+              <dd><input type="text" name="username" />
+              <dt>Password:
+              <dd><input type="password" name="password" />
+
+              <dd><input type="submit" value="Login">
+            </dl>
+          </form>
+        {% endif %}
         {% block content %}{% endblock %}
+        {% if 'username' in session %}
+          <form action="{{url_for('index')}}" method="post">
+              <input type="submit" name="logout" value="logout" />
+          </form>
+        {% endif %}
       </div>
       <div id="footer">
         <!-- TODO Add a link to Ops Home page -->

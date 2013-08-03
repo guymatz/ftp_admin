@@ -7,14 +7,28 @@ import json
 import string, os, random
 import tempfile
 import git
+#import functools
 
 DATA_BAG='music_upload'
 DATA_BAG_ITEM='upload_users-dev'
 REPO_DIR='repo'
 
+def login_required(method):
+  #@functools.wrap(method)
+  def wrapper(*args, **kwargs):
+    if 'username' in flask.session:
+      return method(*args, **kwargs)
+    else:
+      flask.flash("A login is required to use that page")
+      return flask.redirect(flask.url_for('index'))
+  return wrapper
+
 class NewFTP(flask.views.MethodView):
+  @login_required
   def get(self):
     return flask.render_template('new_ftp.html', title='Create New FTP User')
+
+  @login_required
   def post(self):
     # Maybe use this later?
     # form = NewFtpForm()

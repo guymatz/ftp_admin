@@ -1,18 +1,21 @@
 <!-- extend from base layout -->
 {% extends "base.html" %}
-
-{% block content %}
-<h1>Login:</h1>
-<form action="" method="post" name="login">
-    {{form.hidden_tag()}}
-    <dl>
-      <dt>Username:
-      <dd>{{form.username(size=20)}}
-
-      <dt>Password:
-      <dd>{{form.password(size=20)}}
-
-      <dd><input type="submit" value="Login">
-    </dl>
-</form>
+{% block body %}
+    <h1>Login</h1>
+    {% if 'username' in session %}
+        <p>Welcome {{session['username']}}!</p>
+        <p>To logout, click this button:</p>
+        <form action="{{url_for('login')}}" method="post">
+            <input type="submit" name="logout" value="logout" />
+        </form>
+    {% else %}
+        <p>Enter your credentials:</p>
+        <form action="{{url_for('login')}}" method="post">
+            <p>Username:<br />
+            <input type="text" name="username" /></p>
+            <p>Password:<br />
+            <input type="password" name="passwd" /></p>
+            <p><input type="submit" value="submit" /></p>
+        </form>
+    {% endif %}
 {% endblock %}

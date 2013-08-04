@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect
 import flask, flask.views
 from app import app
-from forms import NewFtpForm, LoginForm
+from forms import NewFtpForm
 import subprocess
 import json
 import string, os, random

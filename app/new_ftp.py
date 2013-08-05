@@ -1,34 +1,25 @@
 from flask import render_template, flash, redirect
 import flask, flask.views
 from app import app
-from forms import NewFtpForm
+#from forms import NewFtpForm
 import subprocess
 import json
 import string, os, random
 import tempfile
 import git
+import utils
 #import functools
 
 DATA_BAG='music_upload'
 DATA_BAG_ITEM='upload_users-dev'
 REPO_DIR='repo'
 
-def login_required(method):
-  #@functools.wrap(method)
-  def wrapper(*args, **kwargs):
-    if 'username' in flask.session:
-      return method(*args, **kwargs)
-    else:
-      flask.flash("A login is required to use that page")
-      return flask.redirect(flask.url_for('index'))
-  return wrapper
-
 class NewFTP(flask.views.MethodView):
-  @login_required
+  @utils.login_required
   def get(self):
-    return flask.render_template('new_ftp.html', title='Create New FTP User')
+    return flask.render_template('new_ftp.html', title='Create FTP User')
 
-  @login_required
+  @utils.login_required
   def post(self):
     # Maybe use this later?
     # form = NewFtpForm()

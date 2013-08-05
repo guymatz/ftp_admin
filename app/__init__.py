@@ -6,6 +6,7 @@ app.config.from_object('config')
 
 #from app import views
 from main import Main
+from login import Login
 from list_ftp import ListFTP
 from new_ftp import NewFTP
 
@@ -14,6 +15,10 @@ app.add_url_rule('/',
 
 app.add_url_rule('/<page>/',
                 view_func=Main.as_view('main'))
+
+app.add_url_rule('/login', 
+				view_func=Login.as_view('login'),
+				methods=['GET', 'POST'])
 
 app.add_url_rule('/ftp/list',
 				view_func=ListFTP.as_view('ftp_users'),

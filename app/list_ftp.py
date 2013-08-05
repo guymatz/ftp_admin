@@ -3,15 +3,19 @@ import flask, flask.views
 from app import app
 import subprocess
 import json
+import utils
 
 DATA_BAG='music_upload'
 DATA_BAG_ITEM='upload_users-dev'
 REPO_DIR='repo'
 
 class ListFTP(flask.views.MethodView):
+  @utils.login_required
   def get(self):
     ftp_users = self.load_users(encryption_required=True)
     return render_template('ftp_users.html', title='FTP Users', ftp_users=ftp_users)
+
+  @utils.login_required
   def load_users(self, encryption_required=True):
       try:
         app.logger.debug("In load_users")

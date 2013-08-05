@@ -5,58 +5,38 @@
     {% else %}
       <title>FTP Administration</title>
     {% endif %}
+      <link rel="shortcut icon" href="{{url_for('static', filename='favicon.ico')}}" />
       <link rel=stylesheet type=text/css href="{{ url_for('static', filename='source/style.css') }}">
       <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
   </head>
   <body>
-    <div id="wrapper">
-      <div id="header">FTP Administration:
-      {% if 'username' in session %}
-        <a href="/ftp/new">New FTP Account</a>
-        <a href="/ftp/list">List FTP Accounts</a>
+     <div id="content">
+          {% block body %}{% endblock %}
       </div>
-      {% endif %}
-      <div id="leftcolumn">
-        {% if 'username' in session and 'admin' in session %}
-        <a href="/admin/new">New Admin Account</a>
-        <a href="/admin/list">List Admin Accounts</a>
+      <div id="nav">
+          Navigation:<br />
+          <ul>
+            {% block nav %}{% endblock %}
+            <li><a href="{{url_for('main')}}">index</a></li>
+            <li><a href="/contact/">contact</a></li>
+            <hr id="nav"/>
+            {% if 'username' in session %}
+              <li><a href="{{url_for('new_ftp_user')}}">FTP Administration</a></li>
+              <!-- TODO
+              <li><a href="url_for('new_admin_user')">User Administration</a></li>
+              -->
+              <li><a href="{{url_for('login')}}">logout</a>
+            {% else %}
+              <li><a href="{{url_for('login')}}">login</a>
+            {% endif %}
+          </ul>
       </div>
-      {% endif %}
-      </div>
-      <div id="rightcolumn">
+      <div id="flashed">
         {% with messages = get_flashed_messages() %}
-          {% if messages %}
-            <ul>
-            {% for message in messages %}
-              <li>{{message }} </li>
-            {% endfor %}
-          {% endif %}
+          {% for message in messages %}
+              {{message}}
+          {% endfor %}
         {% endwith %}
-        {% if 'username' in session %}
-        
-        {% else %}
-          <h1>Login:</h1>
-            <form action="/" method="post" name="login">
-            <dl>
-              <dt>Username:
-              <dd><input type="text" name="username" />
-              <dt>Password:
-              <dd><input type="password" name="password" />
-
-              <dd><input type="submit" value="Login">
-            </dl>
-          </form>
-        {% endif %}
-        {% block content %}{% endblock %}
-        {% if 'username' in session %}
-          <form action="{{url_for('index')}}" method="post">
-              <input type="submit" name="logout" value="logout" />
-          </form>
-        {% endif %}
       </div>
-      <div id="footer">
-        <!-- TODO Add a link to Ops Home page -->
-      </div>
-    </div>
   </body>
-</html>
+</html> 

@@ -5,18 +5,18 @@ users = {'admin': {'password':'admin', 'admin':'True'} }
 
 class Login(flask.views.MethodView):
   def get(self):
-    return flask.render_template('index.html')
+    return flask.render_template('login.html')
 
   def post(self):
   	if 'logout' in flask.request.form:
   		flask.session.pop('username', None)
   		return flask.redirect(flask.url_for('main'))
   	required = ['username','password']
-  	app.logger.debug("required = " + required[0])
+  	app.logger.debug("required = " + required[0] + " & " + required[1])
   	for r in required:
-  		if r not in flask.request.form:
+  		if r not in flask.request.form or flask.request.form[r] == "":
   			flask.flash("Error: {0} is required.".format(r))
-  			return flask.redirect(flask.url_for('main'))
+  			return flask.redirect(flask.url_for('login'))
   	username = flask.request.form['username']
   	password = flask.request.form['password']
   	app.logger.debug("username = " + username)
@@ -27,5 +27,5 @@ class Login(flask.views.MethodView):
   	else:
   		app.logger.debug("password after = " + password)
   		flask.flash("Username doesn't exist or incorrect password")
-  		return flask.redirect(flask.url_for('main'))
+  		return flask.redirect(flask.url_for('login'))
   	return flask.redirect(flask.url_for('new_ftp_user'))

@@ -24,3 +24,21 @@ def load_users(encryption_required = True):
     raise Exception("Error getting databag with knife using:" + 
       ' '.join(knife_args))
   return ftp_users
+
+def admin_check(admin_user):
+  try:
+    ADMIN_DB='admins.json'
+    current_user = flask.session['username']
+    app.logger.debug("In load_admins")
+    db = open(ADMIN_DB).read()
+    jdb = json.loads(db)
+    app.logger.debug("In load_admins, admin_user = " + admin_user)
+    app.logger.debug("In load_admins, admin_user's admin status = " + jdb[admin_user]['admin'])
+    if jdb[admin_user]['admin'] and jdb[admin_user]['admin'] == 'True':
+      app.logger.debug("In load_admins, jdb[admin_user]['admin'] = " + jdb[admin_user]['admin'])
+      return True
+    else:
+      app.logger.debug("In load_admins, jdb[admin_user]['admin'] = " + jdb[admin_user]['admin'])
+      return False
+  except Exception, e:
+    raise Exception("Error checking for admin user:" + str(e) )

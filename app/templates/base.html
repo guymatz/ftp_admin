@@ -10,33 +10,40 @@
       <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
   </head>
   <body>
+    <div id="flashed">
+      {% with messages = get_flashed_messages() %}
+        {% for message in messages %}
+            {{message}}
+        {% endfor %}
+      {% endwith %}
+     </div>
      <div id="content">
           {% block body %}{% endblock %}
       </div>
       <div id="nav">
-          Navigation:<br />
+          <br />
           <ul>
-            {% block nav %}{% endblock %}
-            <li><a href="{{url_for('main')}}">index</a></li>
-            <li><a href="/contact/">contact</a></li>
-            <hr id="nav"/>
-            {% if 'username' in session %}
-              <li><a href="{{url_for('new_ftp_user')}}">FTP Administration</a></li>
-              <!-- TODO
-              <li><a href="url_for('new_admin_user')">User Administration</a></li>
-              -->
-              <li><a href="{{url_for('login')}}">logout</a>
-            {% else %}
-              <li><a href="{{url_for('login')}}">login</a>
-            {% endif %}
+            {% block nav %}
+              <li><a href="/contact/">Contact</a></li>
+              <hr id="nav"/>
+              {% if 'username' in session %}
+                <li><a href="{{url_for('new_ftp_user')}}">Add FTP Account</a>
+                <li><a href="{{url_for('ftp_users')}}">List FTP Accounts</a>
+                <!-- TODO
+                
+                -->
+                {% if session['username'] %}
+                  <br />
+                  <li><a href="{{url_for('new_admin')}}">Add Admin Accounts</a></li>
+                  <li><a href="{{url_for('list_admins')}}">List Admin Accounts</a></li>
+                {% endif %}
+                <br />
+                <li><a href="{{url_for('login')}}">logout</a>
+              {% else %}
+                <li><a href="{{url_for('login')}}">login</a>
+              {% endif %}
+            {% endblock %}
           </ul>
-      </div>
-      <div id="flashed">
-        {% with messages = get_flashed_messages() %}
-          {% for message in messages %}
-              {{message}}
-          {% endfor %}
-        {% endwith %}
       </div>
   </body>
 </html> 

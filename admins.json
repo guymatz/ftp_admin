@@ -1,0 +1,22 @@
+{
+  "admin": {
+    "admin": "True", 
+    "password": "admin"
+  }, 
+  "asdfsdf": {
+    "admin": "on", 
+    "password": "AtGrpL1G"
+  }, 
+  "guymatz": {
+    "admin": "True", 
+    "password": "gmatz"
+  }, 
+  "sadfasdf": {
+    "admin": "True", 
+    "password": "o2eo1Flu"
+  }, 
+  "asdfasdf": {
+    "admin": "False", 
+    "password": "Pbp7#eMG"
+  }
+}

@@ -1,0 +1,15 @@
+<!-- extend from base layout -->
+{% extends "base.html" %}
+
+{% block body %}
+<h1>New Admin Account</h1>
+<form action="/admin/new" method="post">
+    <dl>
+      <dt>Please enter the username of the Admin Account:
+      <dd><input type="text" name="admin_username">
+      <dt>Is this admin an ADMIN!?
+      <dd><input type="checkbox" name="is_admin">
+      <dd><input type="submit" value="Create Account">
+    </dl>
+</form>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block body %}
+
+<table id="hor-minimalist-a" summary="Admin Users">
+  <thead>
+  	<tr>
+  	  <th scope="col">Username</th>
+	  <th scope="col">Admin?</th>
+	</tr>
+  </thead>
+  <tbody>
+  {% for admin_user in admin_users|sort %}
+	<tr>
+	  <th>{{ admin_user }} </th>
+	  <th>{{ admin_users[admin_user]['admin'] }} </th>
+	</tr>
+  {% endfor %}
+</tbody>
+</table>
+
+{% endblock %}

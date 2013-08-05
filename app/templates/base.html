@@ -29,15 +29,13 @@
               {% if 'username' in session %}
                 <li><a href="{{url_for('new_ftp_user')}}">Add FTP Account</a>
                 <li><a href="{{url_for('ftp_users')}}">List FTP Accounts</a>
-                <!-- TODO
-                
-                -->
-                {% if session['username'] %}
-                  <br />
+              
+                {% if session['admin'] == 'True' %}
+                  <hr />
                   <li><a href="{{url_for('new_admin')}}">Add Admin Accounts</a></li>
                   <li><a href="{{url_for('list_admins')}}">List Admin Accounts</a></li>
                 {% endif %}
-                <br />
+                <hr />
                 <li><a href="{{url_for('login')}}">logout</a>
               {% else %}
                 <li><a href="{{url_for('login')}}">login</a>

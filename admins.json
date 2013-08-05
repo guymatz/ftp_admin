@@ -3,12 +3,8 @@
     "admin": "True", 
     "password": "admin"
   }, 
-  "asdfsdf": {
-    "admin": "on", 
-    "password": "AtGrpL1G"
-  }, 
-  "guymatz": {
-    "admin": "True", 
+  "gmatz": {
+    "admin": "False", 
     "password": "gmatz"
   }, 
   "sadfasdf": {

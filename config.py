@@ -1,3 +1,6 @@
+import os
+basedir = os.path.abspath(os.path.dirname(__file__))
+
 CSRF_ENABLED = True
 SECRET_KEY = 'e72eef03895a46777740540ecb6adf1e'
 # Vars for use in tha app

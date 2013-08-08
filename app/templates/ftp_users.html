@@ -3,16 +3,17 @@
 
 <table id="hor-minimalist-a" summary="FTP Accounts">
   <thead>
+    <H2>Mouse-over user to show password</H2>
   	<tr>
   	  <th scope="col">Username</th>
-	  <th scope="col">Password</th>
+	  <th scope="col">Comment</th>
 	</tr>
   </thead>
   <tbody>
   {% for ftp_user in ftp_users|sort %}
-	<tr>
+	<tr title="{{ ftp_users[ftp_user]['password'] }}">
 	  <th>{{ ftp_user }} </th>
-	  <th>{{ ftp_users[ftp_user]['password'] }} </th>
+	  <th>{{ ftp_users[ftp_user]['_comment'] }} </th>
 	</tr>
   {% endfor %}
 </tbody>

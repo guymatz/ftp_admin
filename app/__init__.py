@@ -12,6 +12,7 @@ from del_ftp import DeleteFTP
 from new_ftp import NewFTP
 from list_admins import ListAdmins
 from new_admin import NewAdmin
+from del_admin import DeleteAdmin
 
 app.add_url_rule('/', 
 				view_func=Main.as_view('main'))
@@ -41,6 +42,10 @@ app.add_url_rule('/admin/list',
 
 app.add_url_rule('/admin/new',
 				view_func=NewAdmin.as_view('new_admin'),
+				methods=['GET', 'POST'])
+
+app.add_url_rule('/admin/del',
+				view_func=DeleteAdmin.as_view('del_ftp_admins'),
 				methods=['GET', 'POST'])
 
 @app.errorhandler(404)

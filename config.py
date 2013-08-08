@@ -7,3 +7,5 @@ SECRET_KEY = 'e72eef03895a46777740540ecb6adf1e'
 DATA_BAG = 'music_upload'
 DATA_BAG_ITEM = 'upload_users-dev'
 REPO_DIR = 'repo'
+#
+ADMIN_DB='admins.json'

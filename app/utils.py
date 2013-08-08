@@ -14,6 +14,7 @@ import types
 DATA_BAG=app.config['DATA_BAG']
 DATA_BAG_ITEM=app.config['DATA_BAG_ITEM']
 REPO_DIR=app.config['REPO_DIR']
+ADMIN_DB=app.config['ADMIN_DB']
 
 def login_required(method):
   #@functools.wraps(method)
@@ -46,6 +47,20 @@ def load_users(encryption_required = True):
   except Exception, e:
     raise e
   return ftp_users
+
+def load_admins():
+  try:
+    app.logger.debug("Loading json from " + ADMIN_DB)
+    db = open(ADMIN_DB).read()
+  except Exception, e:
+    raise e
+  try:
+    app.logger.debug("Converting to JSON")
+    app.logger.debug("db = " + db)
+    jdb = json.loads(db)
+  except Exception, e:
+    raise e
+  return jdb
 
 def admin_check(admin_user):
   try:
@@ -169,6 +184,20 @@ def user_exists(new_user, hash_of_users):
     return True
   else:
     return False
+    
+
+# persist the admin in a simple json file
+def persist_admins(new_user,admin_users):
+  try:
+    f = open(ADMIN_DB, 'w')
+  except Exception, e:
+    raise e
+  try:
+    f.write( json.dumps(admin_users, indent=2) )
+  except Exception, e:
+    raise e
+  finally:
+    f.close
 
 def get_current_branch(repo):
   branches = repo.git.branch().split('\n')

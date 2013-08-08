@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block body %}
+
+<form action="/ftp/del" method="post">
+
+  <table id="hor-minimalist-a" summary="FTP Accounts">
+    <thead>
+    	<tr>
+        <th scope="col">Delete?</th>
+    	  <th scope="col">Username</th>
+  	</tr>
+    </thead>
+    <tbody>
+    {% for ftp_user in ftp_users|sort %}
+  	<tr>
+      <th> 
+        <input type="checkbox" name="del_list" value={{ ftp_user }} /> 
+      </th>
+  	  <th>{{ ftp_user }} </th>
+  	</tr>
+    {% endfor %}
+  </tbody>
+    <input type="submit" value="Delete FTP Accounts">
+  </table>
+</form>
+{% endblock %}

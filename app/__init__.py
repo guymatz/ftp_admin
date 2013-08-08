@@ -8,6 +8,7 @@ app.config.from_object('config')
 from main import Main
 from login import Login
 from list_ftp import ListFTP
+from del_ftp import DeleteFTP
 from new_ftp import NewFTP
 from list_admins import ListAdmins
 from new_admin import NewAdmin
@@ -28,6 +29,10 @@ app.add_url_rule('/ftp/list',
 
 app.add_url_rule('/ftp/new',
 				view_func=NewFTP.as_view('new_ftp_user'),
+				methods=['GET', 'POST'])
+
+app.add_url_rule('/ftp/del',
+				view_func=DeleteFTP.as_view('del_ftp_users'),
 				methods=['GET', 'POST'])
 
 app.add_url_rule('/admin/list',

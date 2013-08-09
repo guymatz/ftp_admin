@@ -81,10 +81,10 @@ def admin_check(admin_user):
     raise Exception("Error checking for admin user:" + str(e) )
 
 # persist the user to databag, chef server, git, etc.
-def persist_users(user, ftp_users, crud_process):
+def persist_users(new_user, ftp_users, crud_process):
   try:
     save_users_to_chef(ftp_users)
-    save_users_to_git(user, crud_process)
+    save_users_to_git(new_user, crud_process)
   except Exception, e:
     raise e
 

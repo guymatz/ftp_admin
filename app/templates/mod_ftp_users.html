@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block body %}
+
+<form action="/ftp/mod" method="post">
+
+  <table id="hor-minimalist-a" summary="FTP Accounts">
+    <thead>
+      <tr>
+        <th scope="col">Modify?</th>
+        <th scope="col">Username</th>
+        <th scope="col">Current Media Type</th>
+        <th scope="col">Available Media Types (Pick One to change)</th>
+        <th scope="col">Password</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for ftp_user in ftp_users|sort %}
+    <tr>
+      <td> 
+        <input type="checkbox" name="mod_list" value="{{ ftp_user }}" /> 
+      </td>
+      <td>{{ ftp_user }} </td>
+      <td>{{ ftp_users[ftp_user]['media_type'] }} </td>
+      <td><select name="{{ ftp_user }}_media_type">
+          <option value=""></option>
+          <option value="talk">talk</option>
+          <option value="music">music</option>
+        </select>
+      </td>
+      
+      <td>
+        <input type="text" name="{{ ftp_user }}_password">
+      </td>
+
+    </tr>
+    {% endfor %}
+  </tbody>
+    <input type="submit" value="Modify FTP Accounts">
+  </table>
+</form>
+
+{% endblock %}

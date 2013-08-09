@@ -9,6 +9,7 @@ from main import Main
 from login import Login
 from list_ftp import ListFTP
 from del_ftp import DeleteFTP
+from mod_ftp import ModifyFTP
 from new_ftp import NewFTP
 from list_admins import ListAdmins
 from new_admin import NewAdmin
@@ -34,6 +35,10 @@ app.add_url_rule('/ftp/new',
 
 app.add_url_rule('/ftp/del',
 				view_func=DeleteFTP.as_view('del_ftp_users'),
+				methods=['GET', 'POST'])
+
+app.add_url_rule('/ftp/mod',
+				view_func=ModifyFTP.as_view('mod_ftp_users'),
 				methods=['GET', 'POST'])
 
 app.add_url_rule('/admin/list',

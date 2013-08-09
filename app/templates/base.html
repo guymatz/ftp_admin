@@ -30,6 +30,7 @@
                 <li><a href="{{url_for('new_ftp_user')}}">Add FTP Account</a>
                 <li><a href="{{url_for('ftp_users')}}">List FTP Accounts</a>
                 <li><a href="{{url_for('del_ftp_users')}}">Delete FTP Accounts</a></li>
+                <li><a href="{{url_for('mod_ftp_users')}}">Modify FTP Accounts</a></li>
               
                 {% if session['admin'] == 'True' %}
                   <hr />

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block body %}
+
+<form action="/admin/del" method="post">
+
+  <table id="hor-minimalist-a" summary="Admin Accounts">
+    <thead>
+    	<tr>
+        <th scope="col">Delete?</th>
+    	  <th scope="col">Username</th>
+  	</tr>
+    </thead>
+    <tbody>
+    {% for admin_user in admin_users|sort %}
+  	<tr>
+      <th> 
+        <input type="checkbox" name="del_list" value={{ admin_user }} /> 
+      </th>
+  	  <th>{{ admin_user }} </th>
+  	</tr>
+    {% endfor %}
+  </tbody>
+    <input type="submit" value="Delete Admin Accounts">
+  </table>
+</form>
+{% endblock %}

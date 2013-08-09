@@ -5,8 +5,14 @@
 <h1>New FTP Account</h1>
 <form action="/ftp/new" method="post">
     <dl>
-      <dt>Please enter the username of the FTP Account:
+      <dt>Username of the FTP Account:
       <dd><input type="text" name="ftp_username">
+      <dt>Media Type:
+      <dd><select name="media_type">
+      	<dd><option value="">Pick One</option>
+      	<dd><option value="talk">Talk</option>
+      	<dd><option value="music">Music</option>
+      <dd></select>
       <dd><input type="submit" value="Create Account">
     </dl>
 </form>

@@ -6,6 +6,7 @@
     <H2>Mouse-over user to show password</H2>
   	<tr>
   	  <th scope="col">Username</th>
+      <th scope="col">Media Type</th>
 	  <th scope="col">Comment</th>
 	</tr>
   </thead>
@@ -13,6 +14,7 @@
   {% for ftp_user in ftp_users|sort %}
 	<tr title="{{ ftp_users[ftp_user]['password'] }}">
 	  <th>{{ ftp_user }} </th>
+    <th>{{ ftp_users[ftp_user]['media_type'] }} </th>
 	  <th>{{ ftp_users[ftp_user]['_comment'] }} </th>
 	</tr>
   {% endfor %}

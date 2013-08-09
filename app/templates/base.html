@@ -22,29 +22,34 @@
       </div>
       <div id="nav">
           <br />
-          <ul>
             {% block nav %}
-              <li><a href="/contact/">Contact</a></li>
+              <a href="/contact/">Contact</a>
               <hr id="nav"/>
+              <h2>FTP Accounts</H2>
               {% if 'username' in session %}
-                <li><a href="{{url_for('new_ftp_user')}}">Add FTP Account</a>
-                <li><a href="{{url_for('ftp_users')}}">List FTP Accounts</a>
-                <li><a href="{{url_for('del_ftp_users')}}">Delete FTP Accounts</a></li>
-                <li><a href="{{url_for('mod_ftp_users')}}">Modify FTP Accounts</a></li>
+                <a href="{{url_for('new_ftp_user')}}">Add Account</a>
+                <br />
+                <a href="{{url_for('ftp_users')}}">List Accounts</a>
+                <br />
+                <a href="{{url_for('del_ftp_users')}}">Delete Accounts</a>
+                <br />
+                <a href="{{url_for('mod_ftp_users')}}">Modify Accounts</a>
               
                 {% if session['admin'] == 'True' %}
                   <hr />
-                  <li><a href="{{url_for('new_admin')}}">Add Admin Accounts</a></li>
-                  <li><a href="{{url_for('list_admins')}}">List Admin Accounts</a></li>
-                  <li><a href="{{url_for('del_ftp_admins')}}">Delete Admin Accounts</a></li>
+                  <h2>Admin Accounts</H2>
+                  <a href="{{url_for('new_admin')}}">Add Accounts</a>
+                  <br />
+                  <a href="{{url_for('list_admins')}}">List Accounts</a>
+                  <br />
+                  <a href="{{url_for('del_ftp_admins')}}">Delete Accounts</a>
                 {% endif %}
                 <hr />
-                <li><a href="{{url_for('login')}}">logout</a>
+                <a href="{{url_for('login')}}">logout</a>
               {% else %}
                 <li><a href="{{url_for('login')}}">login</a>
               {% endif %}
             {% endblock %}
-          </ul>
       </div>
   </body>
 </html> 

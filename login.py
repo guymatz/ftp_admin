@@ -1,5 +1,5 @@
 import flask, flask.views
-from app import app
+#from app import app
 
 users = {'admin': {'password':'admin', 'admin':'True'}, 'gmatz':  {'password':'gmatz', 'admin':'False'}}
 

@@ -56,3 +56,6 @@ app.add_url_rule('/admin/del',
 @app.errorhandler(404)
 def page_not_found(error):
     return flask.render_template('404.html'), 404
+
+if __name__ == "__main__":
+	    app.run()

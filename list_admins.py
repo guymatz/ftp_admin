@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect
 import flask, flask.views
-from app import app
+#from app import app
 import json
 import utils
 

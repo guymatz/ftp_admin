@@ -1,6 +1,6 @@
 import flask
 from flask import flash, redirect
-from app import app
+#from app import app
 import subprocess
 import json
 import os
@@ -8,13 +8,8 @@ import string
 import random
 import git
 import types
-#from config import DATA_BAG, DATA_BAG_ITEM, REPO_DIR
+from config import DATA_BAG, DATA_BAG_ITEM, REPO_DIR
 #import functools
-
-DATA_BAG=app.config['DATA_BAG']
-DATA_BAG_ITEM=app.config['DATA_BAG_ITEM']
-REPO_DIR=app.config['REPO_DIR']
-ADMIN_DB=app.config['ADMIN_DB']
 
 def login_required(method):
   #@functools.wraps(method)

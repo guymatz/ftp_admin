@@ -1,13 +1,9 @@
 from flask import render_template, flash, redirect
 import flask, flask.views
-from app import app
+#from app import app
 import subprocess
 import json
 import utils
-
-DATA_BAG=app.config['DATA_BAG']
-DATA_BAG_ITEM=app.config['DATA_BAG_ITEM']
-REPO_DIR=app.config['REPO_DIR']
 
 class DeleteAdmin(flask.views.MethodView):
   @utils.login_required

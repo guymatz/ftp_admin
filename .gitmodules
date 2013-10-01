@@ -1,0 +1,3 @@
+[submodule "iheart-chef"]
+	path = iheart-chef
+	url = git@github.ihrint.com:/OPS/iheart-chef.git

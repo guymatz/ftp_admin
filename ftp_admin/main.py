@@ -1,6 +1,6 @@
 import flask, flask.views
 import os
-#from app import app
+from ftp_admin import app
 
 class Main(flask.views.MethodView):
   def get(self, page="index"):

@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect
 import flask, flask.views
-#from app import app
+from ftp_admin import app
 #from forms import NewFtpForm
 import subprocess
 import json
@@ -9,8 +9,7 @@ import tempfile
 import git
 import utils
 #import functools
-
-ADMIN_DB='admins.json'
+from config import ADMIN_DB
 
 class NewAdmin(flask.views.MethodView):
   @utils.login_required

@@ -1,6 +1,6 @@
 import flask
 from flask import flash, redirect
-#from app import app
+from ftp_admin import app
 import subprocess
 import json
 import os
@@ -8,7 +8,7 @@ import string
 import random
 import git
 import types
-from config import DATA_BAG, DATA_BAG_ITEM, REPO_DIR
+from config import DATA_BAG, DATA_BAG_ITEM, REPO_DIR, ADMIN_DB
 #import functools
 
 def login_required(method):
@@ -28,7 +28,7 @@ def load_users(encryption_required = True):
     knife_args = ["knife", "data", "bag", "show",
                         DATA_BAG,
                         DATA_BAG_ITEM,
-                        "-f", "json"]
+                        "-f", "json", "-c", "knife.rb"]
     app.logger.debug("Or here?")
     if encryption_required:
        knife_args.append("--secret-file=/etc/chef/encrypted_data_bag_secret")
@@ -91,9 +91,10 @@ def save_users_to_chef(ftp_users):
   tf.write(json.dumps(ftp_users))
   tf.close()
   try:
-    knife_args = ["knife", "data", "bag", "from", 
-                  "file", DATA_BAG, tmp_file,
-                  "--secret-file=/etc/chef/encrypted_data_bag_secret"
+    knife_args = ["knife", "data", "bag", "from", "file",
+		    DATA_BAG, tmp_file,
+                  "-c", "knife.rb",
+		  "--secret-file=/etc/chef/encrypted_data_bag_secret"
                   ]
     app.logger.debug("Knife_args in save_users_to_chef: " + ' '.join(knife_args))
     ftp_users = subprocess.check_output(knife_args)
@@ -134,7 +135,8 @@ def save_users_to_git(user, crud_process):
   # get unexcrypted users
   try:
     knife_args = ["knife", "data", "bag", "show",
-                  DATA_BAG, DATA_BAG_ITEM, "-f", "json"
+                  DATA_BAG, DATA_BAG_ITEM,
+		  "-f", "json", "-c", "knife.rb"
                   ]
     app.logger.debug("Knife_args in save_users_to_git: " + ' '.join(knife_args))
     output = subprocess.check_output(knife_args)

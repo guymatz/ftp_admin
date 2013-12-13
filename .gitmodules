@@ -1,0 +1,3 @@
+[submodule "ftp_admin/iheart-chef"]
+	path = ftp_admin/iheart-chef
+	url = git@github.ihrint.com:OPS/iheart-chef.git
